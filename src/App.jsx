@@ -3,7 +3,8 @@ import {
   Menu, X, MessageCircle, Building, Car,
   TrendingUp, ShieldCheck, Clock, ChevronRight,
   Phone, Zap, Rocket, Crosshair, Lock, ChevronDown,
-  LineChart, Wallet, ArrowRightLeft, Sparkles, CheckCircle2
+  LineChart, Wallet, ArrowRightLeft, Sparkles, CheckCircle2,
+  Send, User
 } from 'lucide-react';
 
 // --- ADVANCED HOOKS ---
@@ -696,6 +697,164 @@ const Footer = () => {
   );
 };
 
+const Chatbot = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { id: 1, type: 'bot', text: 'Olá! Sou seu assistente virtual Danka. Como posso ajudar na sua jornada de crescimento patrimonial hoje?' }
+  ]);
+  const [showOptions, setShowOptions] = useState(true);
+  const scrollRef = useRef(null);
+
+  const options = {
+    start: [
+      { label: 'Como funciona?', value: 'how_it_works' },
+      { label: 'Quero simular', value: 'simulate' },
+      { label: 'Falar com consultor', value: 'talk_consultant' }
+    ],
+    how_it_works: [
+      { label: 'Ver vantagens', value: 'advantages' },
+      { label: 'Simular agora', value: 'simulate' },
+      { label: 'Voltar', value: 'start' }
+    ],
+    advantages: [
+      { label: 'Quero simular', value: 'simulate' },
+      { label: 'Voltar', value: 'start' }
+    ],
+    simulate: [
+      { label: 'Entendi!', value: 'start' },
+      { label: 'Dúvidas?', value: 'how_it_works' }
+    ],
+    talk_consultant: [
+      { label: 'Voltar', value: 'start' }
+    ]
+  };
+
+  const [currentOptionSet, setCurrentOptionSet] = useState('start');
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const addMessage = (text, type) => {
+    setMessages(prev => [...prev, { id: Date.now(), type, text }]);
+  };
+
+  const handleOptionClick = (option) => {
+    addMessage(option.label, 'user');
+    setShowOptions(false);
+
+    setTimeout(() => {
+      let botResponse = "";
+      let nextOptions = "start";
+
+      switch (option.value) {
+        case 'how_it_works':
+          botResponse = "Nossa Engenharia Financeira utiliza o sistema de consórcios de forma estratégica. Em vez de juros altos de financiamento, você paga uma taxa administrativa fixa e usa estratégias de lances inteligentes para captar capital barato e rápido.";
+          nextOptions = 'how_it_works';
+          break;
+        case 'simulate':
+          botResponse = "Ótima escolha! Você pode usar nosso simulador logo acima para ver a economia real. Vou te levar para lá.";
+          nextOptions = 'simulate';
+          window.location.hash = "simulador";
+          break;
+        case 'advantages':
+          botResponse = "As principais vantagens são: Taxa 0% de juros, proteção contra inflação, poder de compra à vista e flexibilidade total para imóveis, frotas ou capital de giro.";
+          nextOptions = 'advantages';
+          break;
+        case 'talk_consultant':
+          botResponse = "Nossos consultores estão prontos para desenhar sua estratégia personalizada. Clique no botão de WhatsApp abaixo ou me diga se quer voltar.";
+          nextOptions = 'talk_consultant';
+          break;
+        case 'start':
+          botResponse = "No que mais posso te ajudar?";
+          nextOptions = 'start';
+          break;
+        default:
+          botResponse = "Entendi. Como posso prosseguir?";
+          nextOptions = 'start';
+      }
+
+      addMessage(botResponse, 'bot');
+      setCurrentOptionSet(nextOptions);
+      setShowOptions(true);
+    }, 600);
+  };
+
+  return (
+    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+      {/* Botão Flutuante */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-2xl relative group ${isOpen ? 'bg-zinc-800 rotate-90' : 'bg-amber-500 hover:scale-110'}`}
+      >
+        <div className="absolute inset-0 bg-amber-400 rounded-2xl blur-xl opacity-0 group-hover:opacity-40 transition-opacity"></div>
+        {isOpen ? <X className="text-white relative z-10" /> : <MessageCircle className="text-zinc-950 relative z-10" />}
+      </button>
+
+      {/* Janela do Chat */}
+      <div className={`absolute bottom-20 right-0 w-[90vw] sm:w-[400px] h-[500px] bg-zinc-950/90 backdrop-blur-2xl border border-white/10 rounded-[2rem] shadow-2xl flex flex-col overflow-hidden transition-all duration-500 origin-bottom-right ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-90 pointer-events-none'}`}>
+
+        {/* Header */}
+        <div className="p-6 bg-gradient-to-r from-zinc-900 to-zinc-950 border-b border-white/5 flex items-center gap-4">
+          <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+            <Sparkles size={20} className="text-zinc-950" />
+          </div>
+          <div>
+            <h3 className="text-white font-bold tracking-tight">Danka Assistant</h3>
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Online agora</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Mensagens Area */}
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth">
+          {messages.map((msg) => (
+            <div key={msg.id} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'} animate-chat-msg`}>
+              <div className={`max-w-[80%] rounded-2xl p-4 text-sm leading-relaxed ${msg.type === 'user' ? 'bg-amber-500 text-zinc-950 font-medium rounded-tr-none' : 'bg-zinc-900 text-zinc-300 border border-white/5 rounded-tl-none'}`}>
+                {msg.text}
+              </div>
+            </div>
+          ))}
+
+          {/* Opções Selecionáveis */}
+          {showOptions && (
+            <div className="flex flex-wrap gap-2 pt-2">
+              {options[currentOptionSet].map((opt, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleOptionClick(opt)}
+                  className="bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-white/5 hover:border-amber-500/30 px-4 py-2 rounded-full text-xs font-medium transition-all duration-300 animate-chat-msg"
+                >
+                  {opt.label}
+                </button>
+              ))}
+              {currentOptionSet === 'talk_consultant' && (
+                <a
+                  href="https://wa.me/5511999999999"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-zinc-950 border border-emerald-500/20 px-4 py-2 rounded-full text-xs font-bold transition-all duration-300 animate-chat-msg flex items-center gap-1.5"
+                >
+                  <Phone size={12} /> WhatsApp
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer info sutil */}
+        <div className="p-4 text-center border-t border-white/5">
+          <p className="text-[10px] text-zinc-600 font-medium tracking-tighter uppercase">Tecnologia Danka Patrimônio &copy; 2026</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // --- MAIN APP COMPONENT ---
 export default function App() {
   return (
@@ -706,6 +865,8 @@ export default function App() {
         .animate-dash { animation: dash 3s linear infinite backwards; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         .animate-ticker { animation: ticker 20s linear infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-chat-msg { animation: fadeIn 0.4s ease-out forwards; }
       `}} />
 
       <InteractiveBackground />
@@ -721,6 +882,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <Chatbot />
     </div>
   );
 }
