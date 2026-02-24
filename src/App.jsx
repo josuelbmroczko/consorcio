@@ -191,8 +191,8 @@ const Hero = () => {
 
             <Reveal delay={100}>
               <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.1] mb-8 tracking-tighter">
-                Construa seu <span className="hidden sm:block" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600">patrimônio.</span><span />
+                Construa seu  <span className="text-amber-500">patrimônio.</span> <span className="hidden sm:block" />
+               
                 Com inteligência.
               </h1>
             </Reveal>
