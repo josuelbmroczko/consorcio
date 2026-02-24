@@ -89,6 +89,7 @@ const InteractiveBackground = () => {
   );
 };
 
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -181,24 +182,24 @@ const Hero = () => {
             <Reveal delay={0}>
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-white/10 text-zinc-300 text-xs font-semibold tracking-widest uppercase mb-8 backdrop-blur-md">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                 </span>
-                O Novo Padrão de Aquisição
+                Estratégia Inteligente de Aquisição
               </div>
             </Reveal>
 
             <Reveal delay={100}>
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.05] mb-8 tracking-tighter">
-                Hackeie o <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600">sistema.</span><br />
-                Cresça.
+              <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-[1.1] mb-8 tracking-tighter">
+                Construa seu <br className="hidden sm:block" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600">patrimônio.</span><br />
+                Com inteligência.
               </h1>
             </Reveal>
 
             <Reveal delay={200}>
               <p className="text-lg md:text-xl text-zinc-400 mb-10 max-w-lg leading-relaxed font-light">
-                Juros compostos são excelentes para quem recebe, péssimos para quem paga. A Danka inverte a lógica do mercado para alavancar seu patrimônio.
+                Utilize a engenharia financeira para alavancar suas conquistas. A Danka transforma o mercado para proteger e crescer seu capital de forma segura.
               </p>
             </Reveal>
 
@@ -857,6 +858,11 @@ const Chatbot = () => {
 
 // --- MAIN APP COMPONENT ---
 export default function App() {
+  // scroll to top when the app first renders (and on refresh)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="font-sans bg-zinc-950 text-zinc-50 selection:bg-amber-500 selection:text-zinc-950 min-h-screen">
       <style dangerouslySetInnerHTML={{
